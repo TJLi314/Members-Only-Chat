@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    <div>
+        <form action="" method="POST">
+            <label for="username">Username</label>
+            <input name="username" placeholder="username" type="text" />
+    
+            <label for="password">Password</label>
+            <input name="password" type="password" />
+    
+            <label for="confirmPassword">Confirm Password</label>
+            <input name="confirmPassword" type="password" />
+            
+            <button>Sign Up</button>
+            
+        </form>
+    </div>
+    <p>Already have an account? Log in here:</p>
+    <a href="/log-in">Log in</a>
+   <div>
+        <%if (errors) {%>
+            <%errors.forEach(error => {%>
+                <p id = "err-msg-signup" style="color: red;"><%=error.msg%></p>
+            <%})%>
+        <%}%>
+   </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <%if (user.membership) {%>
+                <p style="color: red;">You already have a membership doofus</p>
+                <p>Go back to <a href="/home">home</a></p>
+        <%} else {%>
+            <h1>Apply for a membership!</h1>
+            <h3>Enter secret password</h3>
+            <form action="" method="POST">
+                <label for="password">Password</label>
+                <input name="password" placeholder="password" type="password" />
+                
+                <button>Submit</button>
+            </form>
+
+            <% if (error) {%>
+                <p style="color: red;">Wrong password silly</p>
+            <%}%>
+        <%}%>
+    </body>
+</html>
