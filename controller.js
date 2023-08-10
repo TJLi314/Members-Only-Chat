@@ -19,7 +19,7 @@ exports.sign_up_post = [
     body("username", "Name must not be empty").trim().isLength({min: 1}).escape(),
     body("username").custom(async value => {
 
-        const user = await User.findOne({username: value});
+        const user = await User.findOne({username: value}).exec();
         if (user) {
             throw new Error("Username already in use");
         }
@@ -63,9 +63,10 @@ exports.log_in_post = passport.authenticate("local", {
     failureFlash: true
 })
 
-exports.home_get = (req, res, next) => {
-    res.render("home", {user: res.locals.currentUser});
-}
+exports.home_get = asyncHandler(async (req, res, next) => {
+    const allMessages = await Message.find({}).populate("user").sort({date: -1}).exec();
+    res.render("home", {currentUser: res.locals.currentUser, messages: allMessages});
+});
 
 exports.membership_get = (req, res, next) => {
     res.render("membership", {user: res.locals.currentUser, error: false});
@@ -94,7 +95,38 @@ exports.log_out = (req, res, next) => {
     })
 }
 
-exports.chat_room_get = (req, res, next) => {
-    res.render("chat_room", {user: res.locals.currentUser});
+exports.create_message_get = (req, res, next) => {
+    res.render("create_message", {errors: null});
 }
 
+exports.create_message_post = [
+    body("title", "Title must not be empty").trim().isLength({min: 1}).escape(),
+    body("text", "Text must not be empty").trim().isLength({min: 1}).escape(),
+
+    asyncHandler(async (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.render("create_message", {errors: errors.array()});
+        } else {
+            var currentdate = new Date();
+            var datetime = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+            const message = new Message({
+                title: req.body.title, text: req.body.text, user: res.locals.currentUser, date: datetime,
+            });
+
+            await message.save();
+            res.redirect("/home");
+        }
+    })
+];
+
+exports.delete_message_post = asyncHandler(async (req, res, next) => {
+    await Message.findByIdAndRemove(req.body.messageid);
+    res.redirect("/home");
+});

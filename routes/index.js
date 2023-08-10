@@ -15,7 +15,9 @@ router.post('/log-in', controller.log_in_post);
 router.get('/home', controller.home_get);
 router.get('/log-out', controller.log_out);
 
-router.get('/chat-room', controller.chat_room_get);
-// router.get('/chat-room', controller.chat_room_post);
+router.get('/create-message', controller.create_message_get);
+router.post('/create-message', controller.create_message_post);
+
+router.post('/delete-message', controller.delete_message_post);
 
 module.exports = router;

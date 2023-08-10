@@ -7,4 +7,13 @@ h3 {
     text-align: center;
 }
 
+.text-area {
+    background-color: pink;
+    margin: 20px;
+    border-color: purple;
+    border-width: 5px;
+    border-style: solid;
+    width: 500px;
+}
+
 

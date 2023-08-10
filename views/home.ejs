@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="style.css">
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -6,11 +7,32 @@
     </head>
     <body>
         <div>
-            <h1>Welcome <%=user.username%>!</h1>
+            <h1>Welcome to the chat room <%=currentUser.username%>!</h1>
+            <p> Please be nice</p>
             <p>Become a member to have special privileges in the chat room!</p>
             <a href="/membership">Membership</a>
-            <br><br><a href="/chat-room">Start Chatting</a>
+            <br><br><a href="/create-message">Create new message</a>
             <br><br><a href="/log-out">Log Out</a>
+        </div>
+
+        <div>
+            <% messages.forEach(message => {%>
+                <div class="text-area">
+                    <h3><%=message.title%></h3>
+                    <p><%=message.text%></p>
+                    
+                    <% if (currentUser.membership) {%>
+                        <p><%=message.date%></p>
+                        <p><%=message.user.username%></p>
+                        <div>
+                            <form action="/delete-message" method="POST">
+                                <input type="hidden" name="messageid" value=<%=message._id%>>
+                                <button>Delete</button>
+                            </form>
+                        </div>
+                    <%}%>
+                </div>
+            <%})%>
         </div>
     </body>
 </html>
